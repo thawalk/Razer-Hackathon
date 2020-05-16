@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 
 class MainScreen extends StatefulWidget {
@@ -22,27 +23,48 @@ class _MainScreenState extends State<MainScreen> {
 
   String _title = 'Pay';
   int _selectedIndex = 0;
+  String barcode = '';
 
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
    
     final List<Widget> _children = [
+      Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height/2-20,
+          padding: EdgeInsets.all(8.0),
+          child: RaisedButton.icon(      //Tharun
+            onPressed:_scan,
 
-      FlatButton(
-          onPressed: () => {},
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("Pay With QR",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.green),
-                    textAlign: TextAlign.center),
-              ])),
+            icon: Icon(
+                Icons.camera
+            ),
+            label: Text('Pay by QR code'),
+            color: Colors.green,
+          )
+      ),
+      
+
+
+//      FlatButton(
+//          onPressed: () => {},
+//          child: Column(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              crossAxisAlignment: CrossAxisAlignment.center,
+//              children: [
+//                Text("Pay With QR",
+//                    style: TextStyle(
+//                        fontSize: 30,
+//                        fontWeight: FontWeight.w700,
+//                        color: Colors.green),
+//                    textAlign: TextAlign.center),
+//                Text('RESULT  $barcode'),
+//                RaisedButton(onPressed: _scan, child: Text("Scan")),
+//                RaisedButton(onPressed: _scanPhoto, child: Text("Scan Photo")),
+//              ])),
       SavingsScreen(),
       ProgressScreen(),
       SettingsScreen(),
@@ -104,6 +126,16 @@ class _MainScreenState extends State<MainScreen> {
             ),
             backgroundColor: Colors.white,
             body: _children[_selectedIndex]));
+  }
+
+  Future _scan() async {
+    String barcode = await scanner.scan();
+    setState(() => this.barcode = barcode);
+  }
+
+  Future _scanPhoto() async {
+    String barcode = await scanner.scanPhoto();
+    setState(() => this.barcode = barcode);
   }
 
   void _onItemTapped(int index) {
