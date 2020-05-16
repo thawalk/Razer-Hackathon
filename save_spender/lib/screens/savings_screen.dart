@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:save_spender/models/user_model.dart';
 import '../screens/GoalsRelated/goal_list.dart';
 import '../models/goal_model.dart';
 import '../screens/GoalsRelated/goal_supplement.dart';
@@ -11,6 +12,7 @@ class SavingsScreen extends StatefulWidget {
 
 class _SavingsScreenState extends State<SavingsScreen> {
   List<Goal> _goalsList = [];
+  User user = new User();
 
   void _startAddNewGoals(BuildContext ctx) {
     showModalBottomSheetApp(
@@ -40,6 +42,7 @@ class _SavingsScreenState extends State<SavingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    user.demoStart();
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -51,8 +54,16 @@ class _SavingsScreenState extends State<SavingsScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('Total Savings: \$1000',
-              style: TextStyle(fontSize: 30),),
+              FutureBuilder<int>(
+                future: user.savings.getBalance(),
+                builder: (context, snapshot) {
+                  if(snapshot.connectionState == ConnectionState.done)
+                    return Text('Total Savings: \$${snapshot.data.toString()}',
+                      style: TextStyle(fontSize: 30),);
+                  else
+                    return CircularProgressIndicator();
+                },
+              ),
             ],
           ),
           GoalsList(_goalsList),

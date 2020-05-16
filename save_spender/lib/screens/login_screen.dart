@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:save_spender/models/user_model.dart';
 import '../screens/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {

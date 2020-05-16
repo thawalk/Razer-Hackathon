@@ -7,6 +7,7 @@ import 'package:save_spender/models/bank_account_model.dart';
 
 class BankService {
   static final String urlApi = 'https://razerhackathon.sandbox.mambu.com/api/';
+  // https://stackoverflow.com/questions/50244416/how-to-pass-basic-auth-credentials-in-api-call-for-a-flutter-mobile-application/50244616
   static final basicAuth = 'Basic ' + base64Encode(utf8.encode('Team63:pass11483ACA2C'));
   static final headers = {HttpHeaders.authorizationHeader: basicAuth,
   HttpHeaders.contentTypeHeader: 'application/json'};
