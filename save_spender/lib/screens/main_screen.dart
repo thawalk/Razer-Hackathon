@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+//import 'package:qrscan/qrscan.dart' as scanner;
 
 
 
