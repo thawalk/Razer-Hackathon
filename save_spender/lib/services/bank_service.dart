@@ -90,7 +90,7 @@ class BankService {
   // Creates a new account
   // ClientId refers to the Mambu encodedKey of the client
   // Returns a map of the id and encodedKey of the created account
-  static Future<BankAccount> createAccount(String clientId, AccountType accountType) async {
+  static Future<BankAccount> createAccount(String clientIdKey, AccountType accountType) async {
     var name;
     switch (accountType) {
       case AccountType.WALLET:
@@ -105,7 +105,7 @@ class BankService {
     final url = urlApi + "savings";
     var body = {
       "savingsAccount": {
-        "accountHolderKey": clientId,
+        "accountHolderKey": clientIdKey,
         "accountHolderType": "CLIENT",
         "name": name,
         "productTypeKey": "8a8e878471bf59cf0171bf6979700440",

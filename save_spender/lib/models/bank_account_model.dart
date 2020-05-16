@@ -19,6 +19,7 @@ class BankAccount {
   Future<int> getBalance() async {
     try {
       int balance = await BankService.getBalance(this.accountId);
+      this.balance = balance;
       return balance;
     } on MambuException catch (e) {
       _processMambuException(e);
