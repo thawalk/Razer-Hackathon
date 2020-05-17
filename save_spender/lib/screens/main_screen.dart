@@ -28,7 +28,49 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   String barcode = '';
   User user = new User();
-  //Goal goal;
+
+  TextEditingController customController = TextEditingController();
+
+  createDepositDialog(BuildContext context){
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text("How much would you like to deposit?"),
+        content: TextField(
+          controller: customController,
+        ),
+          actions: <Widget>[
+            MaterialButton(
+          elevation: 5.0,
+           child:Text('Deposit'),
+        onPressed: (){
+            Navigator.of(context).pop(int.parse(customController.text.toString()));
+        },
+      )
+        ],
+      );
+    });
+  }
+
+  createDepositDialogAfterQR(BuildContext context){
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text("Would you like to set aside some funds into your savings?"),
+        content: TextField(
+          controller: customController,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child:Text('Deposit'),
+            onPressed: (){
+              Navigator.of(context).pop(int.parse(customController.text.toString()));
+            },
+          )
+        ],
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +78,7 @@ class _MainScreenState extends State<MainScreen> {
     user.demoStart();
     final List<Widget> _children = [
       Column(
+
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           SizedBox(
@@ -68,18 +111,39 @@ class _MainScreenState extends State<MainScreen> {
                   }
               ),
               Container(
+                  height: MediaQuery.of(context).size.height/2,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/2-20,
                   padding: EdgeInsets.all(8.0),
                   child: RaisedButton.icon(      //Tharun
                     onPressed:_scan,
                     icon: Icon(
-                        Icons.camera
+                        Icons.camera,
+                      size: 35,
+
                     ),
-                    label: Text('Pay by QR code'),
+                    label: Text('Pay by QR code',style: TextStyle(fontSize: 28)),
+
+
                     color: Colors.green,
                   )
               ),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height/5,
+                  padding: EdgeInsets.all(8.0),
+                  child: RaisedButton.icon(      //Tharun
+                    onPressed: (){createDepositDialog(context);},
+
+                    icon: Icon(
+                        Icons.attach_money,
+                      size: 35,
+                    ),
+                    label: Text('Deposit',style: TextStyle(fontSize: 28)),
+
+                    color: Colors.green,
+                  )
+
+              )
             ],
           )
         ],
@@ -150,6 +214,7 @@ class _MainScreenState extends State<MainScreen> {
   Future _scan() async {
     String barcode = await scanner.scan();
     setState(() => this.barcode = barcode);
+    createDepositDialogAfterQR(context);
   }
 
   Future _scanPhoto() async {
