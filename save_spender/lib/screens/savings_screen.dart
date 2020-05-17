@@ -11,7 +11,7 @@ class SavingsScreen extends StatefulWidget {
 }
 
 class _SavingsScreenState extends State<SavingsScreen> {
-  List<Goal> _goalsList = [];
+  Goal _goalsList;
   User user = new User();
 
   void _startAddNewGoals(BuildContext ctx) {
@@ -36,7 +36,7 @@ class _SavingsScreenState extends State<SavingsScreen> {
     );
 
     setState(() {
-      _goalsList.add(newGoal);
+      _goalsList = newGoal;
     });
   }
 

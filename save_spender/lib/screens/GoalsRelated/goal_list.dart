@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../../models/goal_model.dart';
 
 class GoalsList extends StatelessWidget {
-  List<Goal> goals = [];
+  Goal goals;
   //final Function deleteTx;
   //final Function showEditModal;
 
@@ -11,52 +11,49 @@ class GoalsList extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
-  return SingleChildScrollView(
-    child: Container(
-      height: MediaQuery.of(context).size.height,
-      child: goals.isEmpty
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'No goals added yet',
-                  style: TextStyle(
-                      fontSize: 20, color: Theme.of(context).primaryColor),
-                ),
-               
-              ],
-            )
-          : ListView.builder(
-                    itemBuilder: (ctx, index) {
-                      return Card(
-                        elevation: 5,
-                        margin: EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 5,
-                        ),
-                        child:
-                            // ListTile(
-                            // leading:
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(goals[index].goalName),
-                                Text('${goals[index].goalMoney}'),
-                              ],  
-                            )
+  return Container(
+    height: MediaQuery.of(context).size.height,
+    child: goals == null
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'No goals added yet',
+                style: TextStyle(
+                    fontSize: 20, color: Theme.of(context).primaryColor),
+              ),
+             
+            ],
+          )
+        :
+                   Card(
+                      elevation: 5,
+                      margin: EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 5,
+                      ),
+                      child:
+                          // ListTile(
+                          // leading:
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(goals.goalName,
+                              style: TextStyle(fontSize: 30),),
+                              Text('${goals.goalMoney}',
+                              style: TextStyle(fontSize: 30)),
+                            ],  
+                          )
 
 
 
 
-                      );
-                    },
-                    itemCount: goals.length,
-                  ),
+                    )
+      
 
 
 
-    )
   );
 
 
