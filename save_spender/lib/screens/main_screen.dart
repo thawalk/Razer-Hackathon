@@ -12,6 +12,7 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'GoalsRelated/goal_supplement.dart';
 import 'deposit_related/deposit_pop.dart';
+import '../models/goal_model.dart';
 
 class MainScreen extends StatefulWidget {
   //MainScreen({});
@@ -27,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   String barcode = '';
   User user = new User();
-
+  //Goal goal;
 
   @override
   Widget build(BuildContext context) {

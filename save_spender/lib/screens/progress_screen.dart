@@ -3,16 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:save_spender/models/user_model.dart';
+import 'package:save_spender/screens/GoalsRelated/goal_list.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../screens/savings_screen.dart';
 import 'package:flutter_thermometer/label.dart';
 import 'package:flutter_thermometer/scale.dart';
 import 'package:flutter_thermometer/setpoint.dart';
 import 'package:flutter_thermometer/thermometer.dart';
 import 'package:flutter_thermometer/thermometer_paint.dart';
 import 'package:flutter_thermometer/thermometer_widget.dart';
+import '../models/goal_model.dart';
 
 class ProgressScreen extends StatefulWidget {
+  // Goal goal;
+  // ProgressScreen(this.goal);
   @override
   _ProgressScreenState createState() => _ProgressScreenState();
 }
@@ -22,6 +26,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
   //bool isPressed = false;
   User user = new User();
   int savings;
+  //double goalMoney;
+  
+  // void initState() {
+  //           super.initState();
+  //           goalMoney = widget.goal.goalMoney;
+  //      }
 
 
   // bool _isallowed1(){
