@@ -19,3 +19,10 @@ Save Spender tackles the problem by targeting youths who are avid pay-to-play pl
 Save Spender uses the following Sandbox APIs provided at the time:
 - Mambu (for bank account/transactions simulation)
 - Perx (for rewards)
+
+## Framework
+This app is built on flutter. To run the code, you need to have flutter and dart sdk installed.
+
+Navigate to the file and run the following commands:
+1) flutter pub get
+2) flutter run
