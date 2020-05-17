@@ -26,3 +26,7 @@ This app is built on flutter. To run the code, you need to have flutter and dart
 Navigate to the file and run the following commands:
 1) flutter pub get
 2) flutter run
+
+## Username and password
+Username: demo
+Password: demo
