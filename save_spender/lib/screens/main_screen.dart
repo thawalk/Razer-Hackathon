@@ -10,10 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
-
 import 'GoalsRelated/goal_supplement.dart';
 import 'deposit_related/deposit_pop.dart';
-
 
 class MainScreen extends StatefulWidget {
   //MainScreen({});
@@ -30,6 +28,48 @@ class _MainScreenState extends State<MainScreen> {
   String barcode = '';
   User user = new User();
 
+  TextEditingController customController = TextEditingController();
+
+  createDepositDialog(BuildContext context){
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text("How much would you like to deposit?"),
+        content: TextField(
+          controller: customController,
+        ),
+          actions: <Widget>[
+            MaterialButton(
+          elevation: 5.0,
+           child:Text('Deposit'),
+        onPressed: (){
+            Navigator.of(context).pop(int.parse(customController.text.toString()));
+        },
+      )
+        ],
+      );
+    });
+  }
+
+  createDepositDialogAfterQR(BuildContext context){
+    return showDialog(context: context,builder: (context){
+      return AlertDialog(
+        title: Text("Would you like to set aside some funds into your savings?"),
+        content: TextField(
+          controller: customController,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child:Text('Deposit'),
+            onPressed: (){
+              Navigator.of(context).pop(int.parse(customController.text.toString()));
+            },
+          )
+        ],
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +77,7 @@ class _MainScreenState extends State<MainScreen> {
     user.demoStart();
     final List<Widget> _children = [
       Column(
+
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           SizedBox(
@@ -69,18 +110,39 @@ class _MainScreenState extends State<MainScreen> {
                   }
               ),
               Container(
+                  height: MediaQuery.of(context).size.height/2,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height/2+20,
                   padding: EdgeInsets.all(8.0),
                   child: RaisedButton.icon(      //Tharun
                     onPressed:_scan,
                     icon: Icon(
-                        Icons.camera
+                        Icons.camera,
+                      size: 35,
+
                     ),
-                    label: Text('Pay by QR code'),
+                    label: Text('Pay by QR code',style: TextStyle(fontSize: 28)),
+
+
                     color: Colors.green,
                   )
               ),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height/5,
+                  padding: EdgeInsets.all(8.0),
+                  child: RaisedButton.icon(      //Tharun
+                    onPressed: (){createDepositDialog(context);},
+
+                    icon: Icon(
+                        Icons.attach_money,
+                      size: 35,
+                    ),
+                    label: Text('Deposit',style: TextStyle(fontSize: 28)),
+
+                    color: Colors.green,
+                  )
+
+              )
             ],
           )
         ],
@@ -151,6 +213,7 @@ class _MainScreenState extends State<MainScreen> {
   Future _scan() async {
     String barcode = await scanner.scan();
     setState(() => this.barcode = barcode);
+    createDepositDialogAfterQR(context);
   }
 
   Future _scanPhoto() async {
@@ -205,3 +268,39 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 }
+
+
+// import 'dart:async';
+// import 'dart:typed_data';
+
+// import 'package:flutter/services.dart';
+
+// /// camera access denied const.
+// const CameraAccessDenied = 'PERMISSION_NOT_GRANTED';
+
+// /// method channel.
+// const MethodChannel _channel = const MethodChannel('qr_scan');
+
+// /// Scanning Bar Code or QR Code return content
+// Future<String> scan() async => await _channel.invokeMethod('scan');
+
+// /// Scanning Photo Bar Code or QR Code return content
+// Future<String> scanPhoto() async => await _channel.invokeMethod('scan_photo');
+
+// // Scanning the image of the specified path
+// Future<String> scanPath(String path) async {
+//   assert(path != null && path.isNotEmpty);
+//   return await _channel.invokeMethod('scan_path', {"path": path});
+// }
+
+// // Parse to code string with uint8list
+// Future<String> scanBytes(Uint8List uint8list) async {
+//   assert(uint8list != null && uint8list.isNotEmpty);
+//   return await _channel.invokeMethod('scan_bytes', {"bytes": uint8list});
+// }
+
+// /// Generating Bar Code Uint8List
+// Future<Uint8List> generateBarCode(String code) async {
+//   assert(code != null && code.isNotEmpty);
+//   return await _channel.invokeMethod('generate_barcode', {"code": code});
+// }
