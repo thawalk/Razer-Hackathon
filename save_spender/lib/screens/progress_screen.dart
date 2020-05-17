@@ -59,23 +59,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   // }
 
   
-    _openPERXwebpage(BuildContext context) async {
-//    final url = 'https://light.microsite.perxtech.io/game/3?token=6bead735994ceb98d99b022293423c05f3358dd659a00a08d0243b4ce8c8b77d';
-//    //Fires up PINATA Game
-//    final response = await http.get(url);
-////    dynamic body = jsonDecode(response.body);
-//
-//    // If server returns an OK response, parse the JSON.
-//    if (response.statusCode == 200) {
-//      print(response.body);
-//
-//    }
-//    // If that response was not OK, throw an error.
-//    else {
-//      // throw Exception('Failed to load post');
-//      print('Failed to load post');
-//    }
-//  }
+    _openPERXwebpage_higherTier(BuildContext context) async {
       const url =
           'https://light.microsite.perxtech.io/game/3?token=6bead735994ceb98d99b022293423c05f3358dd659a00a08d0243b4ce8c8b77d';
       if (await canLaunch(url))
@@ -84,6 +68,26 @@ class _ProgressScreenState extends State<ProgressScreen> {
         print("Error in launching url");
       }
     }
+
+  _openPERXwebpage_middleTier(BuildContext context) async {
+    const url =
+        'https://light.microsite.perxtech.io/game/2?token=6bead735994ceb98d99b022293423c05f3358dd659a00a08d0243b4ce8c8b77d';
+    if (await canLaunch(url))
+      launch(url);
+    else {
+      print("Error in launching url");
+    }
+  }
+
+  _openPERXwebpage_lowestTier(BuildContext context) async {
+    const url =
+        'https://light.microsite.perxtech.io/game/2?token=6bead735994ceb98d99b022293423c05f3358dd659a00a08d0243b4ce8c8b77d';
+    if (await canLaunch(url))
+      launch(url);
+    else {
+      print("Error in launching url");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +128,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       savings >= 7500 ?
                       RaisedButton.icon(
                         //Tharun
-                          onPressed: () => _openPERXwebpage(context),
+                          onPressed: () => _openPERXwebpage_higherTier(context),
                           icon: Icon(Icons.card_giftcard),
-                          label: Text('Random Prize'),
+                          label: Text('Claim Prize!'),
                           color: Colors.green)
                           :
                       RaisedButton.icon(
@@ -142,9 +146,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       savings >= 10000 ?
                       RaisedButton.icon(
                         //Tharun
-                          onPressed: () => _openPERXwebpage(context),
+                          onPressed: () => _openPERXwebpage_higherTier(context),
                           icon: Icon(Icons.card_giftcard),
-                          label: Text('Random Prize'),
+                          label: Text('Claim Prize!'),
                           color: Colors.green)
                           :
                       RaisedButton.icon(
@@ -160,9 +164,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       savings >= 5000 ?
                       RaisedButton.icon(
                         //Tharun
-                          onPressed: () => _openPERXwebpage(context),
+                          onPressed: () => _openPERXwebpage_middleTier(context),
                           icon: Icon(Icons.card_giftcard),
-                          label: Text('Random Prize'),
+                          label: Text('Claim Prize!'),
                           color: Colors.green):
                       RaisedButton.icon(
                         //Tharun
@@ -177,9 +181,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       savings >= 2500 ?
                       RaisedButton.icon(
                         //Tharun
-                          onPressed: () => _openPERXwebpage(context),
+                          onPressed: () => _openPERXwebpage_middleTier(context),
                           icon: Icon(Icons.card_giftcard),
-                          label: Text('Random Prize'),
+                          label: Text('Claim Prize!'),
                           color: Colors.green):
                       RaisedButton.icon(
                         //Tharun
