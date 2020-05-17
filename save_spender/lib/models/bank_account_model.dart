@@ -37,7 +37,7 @@ class BankAccount {
 
   Future<int> transfer(String to, int amt) async {
     try {
-      int balance = await BankService.deposit(this.accountId, amt);
+      int balance = await BankService.transfer(this.accountId, to, amt);
       return balance;
     } on MambuException catch (e) {
       _processMambuException(e);

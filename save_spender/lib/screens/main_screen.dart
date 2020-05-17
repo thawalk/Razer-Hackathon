@@ -26,24 +26,27 @@ class _MainScreenState extends State<MainScreen> {
 
   String _title = 'Pay';
   int _selectedIndex = 0;
-  String barcode = '';
+  String retailerId = '';
   User user = new User();
 
   TextEditingController customController = TextEditingController();
+  TextEditingController customController2 = TextEditingController();
 
-  createDepositDialog(BuildContext context){
+  createSavingsDialog(BuildContext context){
     return showDialog(context: context,builder: (context){
       return AlertDialog(
-        title: Text("How much would you like to deposit?"),
+        title: Text("How much would you like to save?"),
         content: TextField(
           controller: customController,
         ),
           actions: <Widget>[
             MaterialButton(
           elevation: 5.0,
-           child:Text('Deposit'),
-        onPressed: (){
-            Navigator.of(context).pop(int.parse(customController.text.toString()));
+           child:Text('Save!'),
+        onPressed: () {
+            int amt = int.parse(customController.text);
+            user.wallet.transfer(user.savings.accountId, amt);
+            Navigator.of(context).pop(amt);
         },
       )
         ],
@@ -51,18 +54,40 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  createDepositDialogAfterQR(BuildContext context){
+  createPaymentDialogAfterQR(BuildContext context, String retailerId) {
     return showDialog(context: context,builder: (context){
       return AlertDialog(
-        title: Text("Would you like to set aside some funds into your savings?"),
-        content: TextField(
-          controller: customController,
+        title: Text("Payment to Retailer"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("Please input in the amount to you wish to pay"),
+            TextField(controller: customController),
+            SizedBox(height: 20),
+            Text("Would you like to save some money too?"),
+            TextField(controller: customController2)
+          ],
         ),
         actions: <Widget>[
           MaterialButton(
             elevation: 5.0,
-            child:Text('Deposit'),
+            child:Text('Complete'),
             onPressed: (){
+              if (customController.text.isEmpty || int.parse(customController.text) <= 0) {
+                return;
+              } else {
+                final int paymentAmt = int.parse(customController.text);
+                // DEMO CODE
+                if (retailerId == '') {
+                  retailerId = 'STNG225';
+                }
+                user.wallet.transfer(retailerId, paymentAmt);
+              }
+              if (customController2.text.isNotEmpty && int.parse(customController2.text) > 0) {
+                final int saveAmt = int.parse(customController2.text);
+                user.wallet.transfer(user.savings.accountId, saveAmt);
+              }
               Navigator.of(context).pop(int.parse(customController.text.toString()));
             },
           )
@@ -132,13 +157,13 @@ class _MainScreenState extends State<MainScreen> {
                   height: MediaQuery.of(context).size.height/5,
                   padding: EdgeInsets.all(8.0),
                   child: RaisedButton.icon(      //Tharun
-                    onPressed: (){createDepositDialog(context);},
+                    onPressed: (){createSavingsDialog(context);},
 
                     icon: Icon(
                         Icons.attach_money,
                       size: 35,
                     ),
-                    label: Text('Deposit',style: TextStyle(fontSize: 28)),
+                    label: Text('Add to Savings',style: TextStyle(fontSize: 28)),
 
                     color: Colors.green,
                   )
@@ -212,14 +237,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future _scan() async {
-    String barcode = await scanner.scan();
-    setState(() => this.barcode = barcode);
-    createDepositDialogAfterQR(context);
+    String retailerId = await scanner.scan();
+    setState(() => this.retailerId = retailerId);
+    if (retailerId == null) retailerId = '';
+    createPaymentDialogAfterQR(context, retailerId);
   }
 
   Future _scanPhoto() async {
-    String barcode = await scanner.scanPhoto();
-    setState(() => this.barcode = barcode);
+    String retailerId = await scanner.scanPhoto();
+    setState(() => this.retailerId = retailerId);
   }
 
   void _startDepositMoney(BuildContext ctx) {
