@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:save_spender/models/user_model.dart';
 import '../screens/login_screen.dart';
 import '../screens/savings_screen.dart';
 import '../screens/progress_screen.dart';
@@ -9,6 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+
+import 'GoalsRelated/goal_supplement.dart';
+import 'deposit_related/deposit_pop.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -24,47 +28,63 @@ class _MainScreenState extends State<MainScreen> {
   String _title = 'Pay';
   int _selectedIndex = 0;
   String barcode = '';
+  User user = new User();
 
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-   
+    user.demoStart();
     final List<Widget> _children = [
-      Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height/2-20,
-          padding: EdgeInsets.all(8.0),
-          child: RaisedButton.icon(      //Tharun
-            onPressed:_scan,
-
-            icon: Icon(
-                Icons.camera
-            ),
-            label: Text('Pay by QR code'),
-            color: Colors.green,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              FutureBuilder<int>(
+                  future: user.wallet.getBalance(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Wallet Balance: \$${snapshot.data.toString()}",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.account_balance_wallet),
+                            tooltip: 'Deposit Money',
+                            onPressed: () => _startDepositMoney(context),
+                          )
+                        ],
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height/2+20,
+                  padding: EdgeInsets.all(8.0),
+                  child: RaisedButton.icon(      //Tharun
+                    onPressed:_scan,
+                    icon: Icon(
+                        Icons.camera
+                    ),
+                    label: Text('Pay by QR code'),
+                    color: Colors.green,
+                  )
+              ),
+            ],
           )
+        ],
       ),
-
-
-
-//      FlatButton(
-//          onPressed: () => {},
-//          child: Column(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              children: [
-//                Text("Pay With QR",
-//                    style: TextStyle(
-//                        fontSize: 30,
-//                        fontWeight: FontWeight.w700,
-//                        color: Colors.green),
-//                    textAlign: TextAlign.center),
-//                Text('RESULT  $barcode'),
-//                RaisedButton(onPressed: _scan, child: Text("Scan")),
-//                RaisedButton(onPressed: _scanPhoto, child: Text("Scan Photo")),
-//              ])),
       SavingsScreen(),
       ProgressScreen(),
       SettingsScreen(),
@@ -136,6 +156,25 @@ class _MainScreenState extends State<MainScreen> {
   Future _scanPhoto() async {
     String barcode = await scanner.scanPhoto();
     setState(() => this.barcode = barcode);
+  }
+
+  void _startDepositMoney(BuildContext ctx) {
+    showModalBottomSheetApp(
+        context: context,
+        builder: (builder) {
+          return GestureDetector(
+            onTap: () {},
+            child: DepositPop(_depositMoney),
+            behavior: HitTestBehavior.opaque,
+          );
+        });
+  }
+
+  void _depositMoney(int amt) async {
+    await user.wallet.deposit(amt);
+    setState(() {
+      user.wallet.getBalance();
+    });
   }
 
   void _onItemTapped(int index) {
